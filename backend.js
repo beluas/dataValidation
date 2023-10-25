@@ -4,8 +4,11 @@ const port = process.env.PORT || 3000;
 const assert = require("node:assert");
 const { chromium, devices } = require("playwright");
 const { ga_check } = require("./utils.js");
+const { spawnSync } = require("child_process");
 
 app.get("/runTests", async (req, res) => {
+  spawnSync("npx", ["playwright", "install", "chromium"]);
+
   const ga4_url = "https://region1.google-analytics.com/g/collect?";
   const page_view_test_config = {
     tid: "G-VFY3HCNZLX",
