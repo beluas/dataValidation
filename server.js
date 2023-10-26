@@ -6,34 +6,34 @@ const { chromium, devices } = require("playwright");
 const { ga_check } = require("./utils.js");
 const { spawnSync } = require("child_process");
 
-app.get("/1", async (req, res) => {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext({
-    devices: ["Desktop Chrome"],
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
-    viewport: { width: 1280, height: 1024 },
-  });
-  const page = await context.newPage();
-  await page.goto("https://beluacode.com/");
-  page.on("response", async (response) => {
-    console.log("RES", response.url());
-  });
-  page.on("request", async (response) => {
-    console.log("REQ", response.url());
-  });
+// app.get("/1", async (req, res) => {
+//   const browser = await chromium.launch({ headless: false });
+//   const context = await browser.newContext({
+//     devices: ["Desktop Chrome"],
+//     userAgent:
+//       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+//     viewport: { width: 1280, height: 1024 },
+//   });
+//   const page = await context.newPage();
+//   await page.goto("https://beluacode.com/");
+//   page.on("response", async (response) => {
+//     console.log("RES", response.url());
+//   });
+//   page.on("request", async (response) => {
+//     console.log("REQ", response.url());
+//   });
 
-  page.on("console", async (msg) => {
-    console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
-  });
-  //await page.waitForSelector(".cmplz-accept");
+//   page.on("console", async (msg) => {
+//     console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
+//   });
+//   //await page.waitForSelector(".cmplz-accept");
 
-  await page.waitForTimeout(10000);
-  // Teardown
-  await context.close();
-  await browser.close();
-  res.status(200).send("went to page");
-});
+//   await page.waitForTimeout(10000);
+//   // Teardown
+//   await context.close();
+//   await browser.close();
+//   res.status(200).send("went to page");
+// });
 
 app.get("/runTests", async (req, res) => {
   console.log("started");
