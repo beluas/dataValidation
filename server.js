@@ -32,7 +32,6 @@ app.get("/1", async (req, res) => {
   // Teardown
   await context.close();
   await browser.close();
-  await page.screenshot();
   res.status(200).send("went to page");
 });
 
