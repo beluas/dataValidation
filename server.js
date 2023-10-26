@@ -17,6 +17,7 @@ app.get("/", async (req, res) => {
   page.on("request", async (response) => {
     console.log("REQ", response.url());
   });
+  await page.waitForTimeout(10000);
 
   res.status(200).send("went to page");
 });
@@ -79,6 +80,7 @@ app.get("/runTests", async (req, res) => {
         // The actual interesting bit
         //await context.route("**.jpg", (route) => route.abort());
         await page.goto("https://beluacode.com/");
+
         const acceptCookieBtn = page.locator(".cmplz-accept");
 
         await acceptCookieBtn.waitFor();
