@@ -22,6 +22,10 @@ app.get("/", async (req, res) => {
   page.on("request", async (response) => {
     console.log("REQ", response.url());
   });
+
+  page.on("console", (msg) => {
+    console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
+  });
   await page.waitForSelector(".cmplz-accept");
 
   await page.waitForTimeout(30000);
