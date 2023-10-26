@@ -6,8 +6,8 @@ const { chromium, devices } = require("playwright");
 const { ga_check } = require("./utils.js");
 const { spawnSync } = require("child_process");
 
-app.get("/", async (req, res) => {
-  const browser = await chromium.launch();
+app.get("/1", async (req, res) => {
+  const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext({
     devices: ["Desktop Chrome"],
     userAgent:
@@ -17,28 +17,29 @@ app.get("/", async (req, res) => {
   const page = await context.newPage();
   await page.goto("https://beluacode.com/");
   page.on("response", async (response) => {
-    await console.log("RES", response.url());
+    console.log("RES", response.url());
   });
   page.on("request", async (response) => {
-    await console.log("REQ", response.url());
+    console.log("REQ", response.url());
   });
 
   page.on("console", async (msg) => {
-    await console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
+    console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
   });
   //await page.waitForSelector(".cmplz-accept");
 
-  await page.waitForTimeout(30000);
+  await page.waitForTimeout(10000);
   // Teardown
   await context.close();
   await browser.close();
+  await page.screenshot();
   res.status(200).send("went to page");
 });
 
 app.get("/runTests", async (req, res) => {
   console.log("started");
 
-  const ga4_url = "https://region1.google-analytics.com/g/collect?";
+  const ga4_url = "collect?";
   const page_view_test_config = {
     tid: "G-VFY3HCNZLX",
     en: "user_engagement",
@@ -53,11 +54,18 @@ app.get("/runTests", async (req, res) => {
         console.log("setup");
 
         page.on("response", async (response) => {
-          console.log("RES", response.url());
+          const responseURL = await response.url();
+          console.log(responseURL);
+          console.log(responseURL.includes(ga4_url));
+
           try {
-            if (response.url().includes(ga4_url)) {
+            console.log("INSIDE TRY");
+            if (
+              responseURL.includes(ga4_url) ||
+              responseURL.includes(ga4_url)
+            ) {
               // remove %2F values
-              let url = decodeURIComponent(response.url()).replace(ga4_url, "");
+              let url = decodeURIComponent(responseURL).replace(ga4_url, "");
               console.log("from response");
 
               // console.log("URL", url);
@@ -94,12 +102,14 @@ app.get("/runTests", async (req, res) => {
         //await context.route("**.jpg", (route) => route.abort());
         await page.goto("https://beluacode.com/");
 
-        const acceptCookieBtn = page.locator(".cmplz-accept");
+        // INTRODUCE THIS CODE!@@!@!@!@!@!
 
-        await acceptCookieBtn.waitFor();
+        // const acceptCookieBtn = page.locator(".cmplz-accept");
 
-        await acceptCookieBtn.click();
-        console.log("clicked");
+        // await acceptCookieBtn.waitFor();
+
+        // await acceptCookieBtn.click();
+        // console.log("clicked");
 
         await page.waitForTimeout(10000);
         console.log("after wait");
@@ -109,6 +119,7 @@ app.get("/runTests", async (req, res) => {
         // Teardown
         await context.close();
         await browser.close();
+        console.log("browser closed");
       } catch (err) {
         if (err) console.log(err);
       }
