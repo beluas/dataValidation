@@ -17,19 +17,18 @@ app.get("/", async (req, res) => {
   const page = await context.newPage();
   await page.goto("https://beluacode.com/");
   page.on("response", async (response) => {
-    console.log("RES", response.url());
+    await console.log("RES", response.url());
   });
   page.on("request", async (response) => {
-    console.log("REQ", response.url());
+    await console.log("REQ", response.url());
   });
 
-  page.on("console", (msg) => {
-    console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
+  page.on("console", async (msg) => {
+    await console.log(`Browser Console [${msg.type()}]: ${msg.text()}`);
   });
-  await page.waitForSelector(".cmplz-accept");
+  //await page.waitForSelector(".cmplz-accept");
 
   await page.waitForTimeout(30000);
-  await page.screenshot({ path: "screenshot.png" });
   // Teardown
   await context.close();
   await browser.close();
@@ -48,13 +47,14 @@ app.get("/runTests", async (req, res) => {
   try {
     (async () => {
       try {
-        const browser = await chromium.launch({ headless: true });
+        const browser = await chromium.launch({ headless: false });
         const context = await browser.newContext(devices["Desktop Chrome"]);
         const page = await context.newPage();
         // Setup
         console.log("setup");
 
         page.on("response", async (response) => {
+          console.log("RES", response.url);
           try {
             if (response.url().includes(ga4_url)) {
               // remove %2F values
@@ -104,7 +104,6 @@ app.get("/runTests", async (req, res) => {
 
         await page.waitForTimeout(10000);
         console.log("after wait");
-        await page.screenshot({ path: "screenshot2.png" });
 
         //assert((await page.title()) === "Example Domain"); // 👎 not a Web First assertion
 
