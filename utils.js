@@ -85,7 +85,7 @@ const ga_check = async (payload, config, res) => {
             temp_key
           ] = `ERROR: Metrics don't match! Expected: ${config[temp_key]} got instead ${el[temp_key]}`;
           errors.push({
-            temp_obj,
+            ...temp_obj,
           });
         }
       }
