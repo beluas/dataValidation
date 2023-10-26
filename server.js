@@ -11,6 +11,12 @@ app.get("/", async (req, res) => {
   const context = await browser.newContext(devices["Desktop Chrome"]);
   const page = await context.newPage();
   await page.goto("https://beluacode.com/");
+  page.on("response", async (response) => {
+    console.log("RES", response.url());
+  });
+  page.on("request", async (response) => {
+    console.log("REQ", response.url());
+  });
 
   res.status(200).send("went to page");
 });

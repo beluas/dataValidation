@@ -68,7 +68,7 @@ const GA4_MP = {
 };
 const ga_check = async (payload, config, res) => {
   const errors = [];
-
+  console.log("from ga_check");
   //   try {
   await payload.map(async (el) => {
     let temp_key = Object.keys(el)[0];
