@@ -24,7 +24,7 @@ app.get("/", async (req, res) => {
   });
   await page.waitForSelector(".cmplz-accept");
 
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(30000);
   await page.screenshot({ path: "screenshot.png" });
   // Teardown
   await context.close();
