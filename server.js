@@ -6,6 +6,10 @@ const { chromium, devices } = require("playwright");
 const { ga_check } = require("./utils.js");
 const { spawnSync } = require("child_process");
 
+const cors = require("cors");
+
+app.use(cors({ origin: "http://localhost:1234" }));
+
 // app.get("/1", async (req, res) => {
 //   const browser = await chromium.launch({ headless: false });
 //   const context = await browser.newContext({
