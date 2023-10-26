@@ -12,6 +12,7 @@ app.get("/", async (req, res) => {
 
 app.get("/runTests", async (req, res) => {
   //spawnSync("npx", ["playwright", "install", "chromium"]);
+  console.log("started");
 
   const ga4_url = "https://region1.google-analytics.com/g/collect?";
   const page_view_test_config = {
@@ -25,12 +26,14 @@ app.get("/runTests", async (req, res) => {
         const context = await browser.newContext(devices["Desktop Chrome"]);
         const page = await context.newPage();
         // Setup
+        console.log("setup");
+
         page.on("response", async (response) => {
           if (response.url().includes(ga4_url)) {
             // remove %2F values
             let url = decodeURIComponent(response.url()).replace(ga4_url, "");
 
-            //console.log("URL", url);
+            // console.log("URL", url);
             // generate payload splitting url using & and resplitting each block with "="
             // and then push the obj in the payload array
             const query_params = url.split("&");
@@ -60,6 +63,7 @@ app.get("/runTests", async (req, res) => {
         //await context.route("**.jpg", (route) => route.abort());
         await page.goto("https://beluacode.com/");
         const acceptCookieBtn = page.locator(".cmplz-accept");
+        console.log("setup");
 
         await acceptCookieBtn.waitFor();
 
@@ -82,5 +86,5 @@ app.get("/runTests", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server started on http://localhost:${port}`);
+  console.log(`Server started on PORT ${port}`);
 });
