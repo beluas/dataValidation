@@ -8,7 +8,12 @@ const { spawnSync } = require("child_process");
 
 app.get("/", async (req, res) => {
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext(devices["Desktop Chrome"]);
+  const context = await browser.newContext({
+    devices: ["Desktop Chrome"],
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
+    viewport: { width: 1280, height: 1024 },
+  });
   const page = await context.newPage();
   await page.goto("https://beluacode.com/");
   page.on("response", async (response) => {
@@ -17,8 +22,13 @@ app.get("/", async (req, res) => {
   page.on("request", async (response) => {
     console.log("REQ", response.url());
   });
-  await page.waitForTimeout(10000);
+  await page.waitForSelector(".cmplz-accept");
 
+  await page.waitForTimeout(10000);
+  await page.screenshot({ path: "screenshot.png" });
+  // Teardown
+  await context.close();
+  await browser.close();
   res.status(200).send("went to page");
 });
 
@@ -90,6 +100,7 @@ app.get("/runTests", async (req, res) => {
 
         await page.waitForTimeout(10000);
         console.log("after wait");
+        await page.screenshot({ path: "screenshot2.png" });
 
         //assert((await page.title()) === "Example Domain"); // 👎 not a Web First assertion
 
