@@ -2,9 +2,9 @@
   "name": "data_validation",
   "version": "1.0.0",
   "description": "",
-  "main": "backend.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

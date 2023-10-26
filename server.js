@@ -22,7 +22,7 @@ app.get("/runTests", async (req, res) => {
   try {
     (async () => {
       try {
-        const browser = await chromium.launch();
+        const browser = await chromium.launch({ headless: true });
         const context = await browser.newContext(devices["Desktop Chrome"]);
         const page = await context.newPage();
         // Setup
@@ -69,7 +69,7 @@ app.get("/runTests", async (req, res) => {
 
         await acceptCookieBtn.click();
 
-        await page.waitForTimeout(3000);
+        await page.waitForTimeout(10000);
 
         //assert((await page.title()) === "Example Domain"); // 👎 not a Web First assertion
 
