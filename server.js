@@ -7,7 +7,12 @@ const { ga_check } = require("./utils.js");
 const { spawnSync } = require("child_process");
 
 app.get("/", async (req, res) => {
-  res.status(200).send("Cool");
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext(devices["Desktop Chrome"]);
+  const page = await context.newPage();
+  await page.goto("https://beluacode.com/");
+
+  res.status(200).send("went to page");
 });
 
 app.get("/runTests", async (req, res) => {
@@ -29,33 +34,39 @@ app.get("/runTests", async (req, res) => {
         console.log("setup");
 
         page.on("response", async (response) => {
-          if (response.url().includes(ga4_url)) {
-            // remove %2F values
-            let url = decodeURIComponent(response.url()).replace(ga4_url, "");
+          try {
+            if (response.url().includes(ga4_url)) {
+              // remove %2F values
+              let url = decodeURIComponent(response.url()).replace(ga4_url, "");
+              console.log("from response");
 
-            // console.log("URL", url);
-            // generate payload splitting url using & and resplitting each block with "="
-            // and then push the obj in the payload array
-            const query_params = url.split("&");
-            const params = query_params.map((el) => el.split("="));
-            const payload = [];
+              // console.log("URL", url);
+              // generate payload splitting url using & and resplitting each block with "="
+              // and then push the obj in the payload array
+              const query_params = url.split("&");
+              const params = query_params.map((el) => el.split("="));
+              const payload = [];
 
-            params.forEach((el) => {
-              let obj = {};
-              let my_key = el[0];
-              let value = el[1];
+              params.forEach((el) => {
+                let obj = {};
+                let my_key = el[0];
+                let value = el[1];
+                console.log("from foreach");
 
-              obj[my_key] = value;
+                obj[my_key] = value;
 
-              payload.push(obj);
-            });
-            const test_result = await ga_check(
-              payload,
-              page_view_test_config,
-              res
-            );
-            console.log("TEST RESULT", test_result);
-            res.status(200).send(test_result);
+                payload.push(obj);
+              });
+              const test_result = await ga_check(
+                payload,
+                page_view_test_config,
+                res
+              );
+              console.log("TEST RESULT", test_result);
+              res.status(200).send(test_result);
+            }
+          } catch (err) {
+            if (err) console.log(err);
           }
         });
 
@@ -63,13 +74,14 @@ app.get("/runTests", async (req, res) => {
         //await context.route("**.jpg", (route) => route.abort());
         await page.goto("https://beluacode.com/");
         const acceptCookieBtn = page.locator(".cmplz-accept");
-        console.log("setup");
 
         await acceptCookieBtn.waitFor();
 
         await acceptCookieBtn.click();
+        console.log("clicked");
 
         await page.waitForTimeout(10000);
+        console.log("after wait");
 
         //assert((await page.title()) === "Example Domain"); // 👎 not a Web First assertion
 
