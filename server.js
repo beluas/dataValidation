@@ -7,7 +7,7 @@ const { ga_check } = require("./utils.js");
 const { spawnSync } = require("child_process");
 
 app.get("/", async (req, res) => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch();
   const context = await browser.newContext({
     devices: ["Desktop Chrome"],
     userAgent:
@@ -36,7 +36,6 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/runTests", async (req, res) => {
-  //spawnSync("npx", ["playwright", "install", "chromium"]);
   console.log("started");
 
   const ga4_url = "https://region1.google-analytics.com/g/collect?";
@@ -54,7 +53,7 @@ app.get("/runTests", async (req, res) => {
         console.log("setup");
 
         page.on("response", async (response) => {
-          console.log("RES", response.url);
+          console.log("RES", response.url());
           try {
             if (response.url().includes(ga4_url)) {
               // remove %2F values
