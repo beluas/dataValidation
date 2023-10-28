@@ -40,13 +40,16 @@ app.use(cors({ origin: "http://localhost:1234" }));
 // });
 
 app.get("/runTests", async (req, res) => {
-  console.log("started");
-
-  const ga4_url = "collect?";
+  console.log("QUERY", req.query);
+  console.log(req.query.website);
+  let website = req.query.website;
+  const ga4_url = "region";
   const page_view_test_config = {
     tid: "G-VFY3HCNZLX",
-    en: "user_engagement",
+    en: "wewe",
+    dl: "pepp",
   };
+
   try {
     (async () => {
       try {
@@ -58,18 +61,21 @@ app.get("/runTests", async (req, res) => {
 
         page.on("response", async (response) => {
           const responseURL = await response.url();
-          console.log(responseURL);
-          console.log(responseURL.includes(ga4_url));
+          // console.log(responseURL);
+          // console.log(responseURL.includes(ga4_url));
 
           try {
-            console.log("INSIDE TRY");
+            // console.log("INSIDE TRY");
+
             if (
               responseURL.includes(ga4_url) ||
               responseURL.includes(ga4_url)
             ) {
+              console.log(responseURL);
+
               // remove %2F values
               let url = decodeURIComponent(responseURL).replace(ga4_url, "");
-              console.log("from response");
+              // console.log("from response");
 
               // console.log("URL", url);
               // generate payload splitting url using & and resplitting each block with "="
@@ -79,10 +85,11 @@ app.get("/runTests", async (req, res) => {
               const payload = [];
 
               params.forEach((el) => {
+                console.log("element", el);
                 let obj = {};
                 let my_key = el[0];
                 let value = el[1];
-                console.log("from foreach");
+                // console.log("from foreach");
 
                 obj[my_key] = value;
 
@@ -103,7 +110,7 @@ app.get("/runTests", async (req, res) => {
 
         // The actual interesting bit
         //await context.route("**.jpg", (route) => route.abort());
-        await page.goto("https://beluacode.com/");
+        await page.goto(website);
 
         // INTRODUCE THIS CODE!@@!@!@!@!@!
 

@@ -67,15 +67,23 @@ const GA4_MP = {
   _ee: "External Event",
 };
 const ga_check = async (payload, config, res) => {
-  const errors = [];
+  const logs = [];
   console.log("from ga_check");
   //   try {
   await payload.map(async (el) => {
     let temp_key = Object.keys(el)[0];
     if (config[temp_key]) {
-      //   console.log(el[temp_key], config[temp_key]);
+      console.log("WAITING", el[temp_key], config[temp_key]);
       try {
         await assert(el[temp_key] === config[temp_key]);
+        if (el[temp_key] === config[temp_key]) {
+          const temp_obj = {};
+          console.log("TEMP KEY"), temp_key;
+          temp_obj[temp_key] = "PASSED: All good";
+          logs.push({
+            ...temp_obj,
+          });
+        }
       } catch (err) {
         if (err) {
           console.log("ERROR", "Metrics don't match");
@@ -84,7 +92,7 @@ const ga_check = async (payload, config, res) => {
           temp_obj[
             temp_key
           ] = `ERROR: Metrics don't match! Expected: ${config[temp_key]} got instead ${el[temp_key]}`;
-          errors.push({
+          logs.push({
             ...temp_obj,
           });
         }
@@ -92,7 +100,7 @@ const ga_check = async (payload, config, res) => {
     }
   });
 
-  return errors;
+  return logs;
 
   //   } catch (err) {
   //     if (err) console.log(err);
