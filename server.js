@@ -44,6 +44,7 @@ app.get("/runTests", async (req, res) => {
   console.log(req.query.website);
   let website = req.query.website;
   const ga4_url = "analytics";
+  const page_view_event = "en=pageview";
 
   const page_view_test_config = {
     tid: "G-VFY3HCNZLX",
@@ -71,7 +72,7 @@ app.get("/runTests", async (req, res) => {
 
             if (
               responseURL.includes(ga4_url) ||
-              responseURL.includes(ga4_url)
+              responseURL.includes(page_view_event)
             ) {
               console.log(responseURL);
 
