@@ -43,7 +43,8 @@ app.get("/runTests", async (req, res) => {
   console.log("QUERY", req.query);
   console.log(req.query.website);
   let website = req.query.website;
-  const ga4_url = "region";
+  const ga4_url = "analytics";
+
   const page_view_test_config = {
     tid: "G-VFY3HCNZLX",
     en: "wewe",
@@ -63,6 +64,7 @@ app.get("/runTests", async (req, res) => {
           const responseURL = await response.url();
           // console.log(responseURL);
           // console.log(responseURL.includes(ga4_url));
+          console.log(responseURL);
 
           try {
             // console.log("INSIDE TRY");
