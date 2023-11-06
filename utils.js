@@ -66,7 +66,8 @@ const GA4_MP = {
 
   _ee: "External Event",
 };
-const ga_check = async (payload, config, res) => {
+
+const ga_check = async (payload, config) => {
   const logs = [];
   console.log("from ga_check");
   //   try {
@@ -105,16 +106,6 @@ const ga_check = async (payload, config, res) => {
   //   } catch (err) {
   //     if (err) console.log(err);
 };
-
-//   //   gaIDToCheck = gaIDToCheck.trim();
-//   //   payload.map((el) => {
-//   //     console.log(el);
-//   //     if (Object.keys(el)[0] === "tid") {
-//   //       console.log(gaIDToCheck, Object.values(el)[0]);
-//   //       expect(gaIDToCheck).toBe(Object.values(el)[0]);
-//   //     }
-//   });
-//};
 
 module.exports = Object.freeze({
   GA4_MP,
