@@ -1,0 +1,75 @@
+{
+  "actions": [
+    {
+      "actionID": "352",
+      "action": "click",
+      "selector": ".woocommerce-LoopProduct-link"
+    },
+    {
+      "actionID": "555",
+      "action": "click",
+      "selector": ".single_add_to_cart_button"
+    }
+  ],
+  "assertions": [
+    {
+      "actionID": "352",
+      "assertionID": "1",
+      "type": "ga4",
+      "metrics": {
+        "tid": ["G-1234", "does not contain"],
+        "dl": ["ikea", "regex"],
+        "dt": ["1", "equals"],
+        "en": ["1", "contains"],
+        "ecommerce": {
+          "items": [
+            {
+              "item_name": ["item1", "contains"],
+              "item_id": ["item1", "contains"]
+            },
+            {
+              "item_name": ["item2", "contains"],
+              "item_id": ["item2", "contains"]
+            }
+          ]
+        },
+        "ep.e_page_name": ["1", "contains"],
+        "ep.e_module": ["1", "contains"],
+        "ep.u_test_variable_others": ["1", "contains"],
+        "up.u_sso_id": ["1", "contains"]
+      }
+    },
+    {
+      "assertionID": "2",
+      "actionID": "352",
+      "type": "ga4",
+      "metrics": {
+        "tid": ["2", "does not contain"],
+        "dl": ["2", "regex"],
+        "dt": ["2", "equals"],
+        "en": ["2", "contains"],
+        "item_name": ["2", "contains"],
+        "ep.e_page_name": ["2", "contains"],
+        "ep.e_module": ["2", "contains"],
+        "ep.u_test_variable_others": ["2", "contains"],
+        "up.u_sso_id": ["2", "contains"]
+      }
+    },
+    {
+      "actionID": "555",
+      "assertionID": "3",
+      "type": "ga4",
+      "metrics": {
+        "tid": ["3", "does not contain"],
+        "dl": ["3", "regex"],
+        "dt": ["3", "equals"],
+        "en": ["3", "contains"],
+        "item_name": ["3", "contains"],
+        "ep.e_page_name": ["3", "contains"],
+        "ep.e_module": ["3", "contains"],
+        "ep.u_test_variable_others": ["3", "contains"],
+        "up.u_sso_id": ["3", "contains"]
+      }
+    }
+  ]
+}

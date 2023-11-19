@@ -1,6 +1,7 @@
-export default class Action {
-  constructor(page) {
+export default class Instruction {
+  constructor(page, instructions) {
     this.page = page;
+    this.instructions = instructions;
   }
 
   performAction = async (actionInput, selectorInput) => {
