@@ -136,8 +136,12 @@ router.post("/", async (req, res) => {
       await browser.close(); // Close the browser
     } catch (error) {
       console.log(error);
+      res.send(error);
     }
   })();
 });
 
+router.post("/", async (req, res) => {
+  res.send("Pepp");
+});
 module.exports = router;
