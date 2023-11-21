@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 
       await page.goto(website); // Navigate to your website
 
-      await page.waitForTimeout(10000);
+      await page.waitForTimeout(20000);
 
       function createHandler(
         action = { actionID: "pre-actions", newPage: false }
@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
           route.continue();
         };
       }
-      await page.waitForTimeout(5000);
+      await page.waitForTimeout(20000);
 
       await page.unroute(/region/, handler);
 
@@ -79,7 +79,7 @@ router.post("/", async (req, res) => {
           case "click":
             await page.locator(action.selector).first().waitFor();
             await page.locator(action.selector).first().click();
-            await page.waitForTimeout(10000);
+            await page.waitForTimeout(20000);
 
             logger.actions.push({
               actionID: action.actionID,
@@ -94,7 +94,7 @@ router.post("/", async (req, res) => {
         await page.unroute(/region/, handler);
       }
 
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(5000);
 
       for (const request of logger.requests) {
         let testResults = [];
@@ -133,7 +133,7 @@ router.post("/", async (req, res) => {
         request["testResults"] = testResults;
       }
 
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(5000);
       await context.close();
       await browser.close();
       console.log("pepp");
