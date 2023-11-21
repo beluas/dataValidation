@@ -11,8 +11,9 @@ const {
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  (async () => {
-    try {
+  console.log("pepp");
+  try {
+    (async () => {
       let logger = {
         actions: [],
         requests: [],
@@ -135,15 +136,16 @@ router.post("/", async (req, res) => {
       await page.waitForTimeout(1000);
       await context.close();
       await browser.close();
-      res.send(logger);
-    } catch (error) {
-      console.log(error);
-      res.send(error);
-    }
-  })();
+      console.log("pepp");
+      res.send({ logger });
+    })();
+  } catch (error) {
+    console.log(error);
+    res.send({ error });
+  }
 });
 
 router.get("/", async (req, res) => {
-  res.send("Pepp");
+  res.send({ title: "Pepp" });
 });
 module.exports = router;
