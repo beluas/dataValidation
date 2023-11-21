@@ -12,7 +12,7 @@ app.use(express.json());
 
 const test = require("./routes/test.js");
 
-app.use("/ga-test", test);
+app.use("/", test);
 
 app.listen(port, () => {
   console.log(`Server started on PORT ${port}`);

@@ -132,8 +132,10 @@ router.post("/", async (req, res) => {
         request["testResults"] = testResults;
       }
 
+      await page.waitForTimeout(1000);
+      await context.close();
+      await browser.close();
       res.send(logger);
-      await browser.close(); // Close the browser
     } catch (error) {
       console.log(error);
       res.send(error);
@@ -141,7 +143,7 @@ router.post("/", async (req, res) => {
   })();
 });
 
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
   res.send("Pepp");
 });
 module.exports = router;
