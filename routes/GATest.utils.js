@@ -213,7 +213,7 @@ const assertRequests = (
 
 const getParamsFromReq = (url, urlPartToRemove, postData) => {
   url = decodeURIComponent(url);
-  let params = url.replace(urlPartToRemove, "").split("?").join("").split("&");
+  let params = url.split("?")[0].join("").split("&");
   let payload = {};
   params.forEach((param) => {
     let key = param.split("=")[0];
