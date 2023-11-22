@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 
       const handler = createHandler();
 
-      await page.route(/google-analytics\/g/, handler);
+      await page.route(/google-analytics.com\/g/, handler);
 
       await page.goto(website); // Navigate to your website
 
@@ -66,14 +66,14 @@ router.post("/", async (req, res) => {
       }
       await page.waitForTimeout(20000);
 
-      await page.unroute(/google-analytics\/g/, handler);
+      await page.unroute(/google-analytics.com\/g/, handler);
 
       for (const action of postData.actions) {
         action["newPage"] = actualURL !== page.url();
         actualURL = page.url();
         const handler = await createHandler(action);
 
-        await page.route(/google-analytics\/g/, handler);
+        await page.route(/google-analytics.com\/g/, handler);
 
         const timestamp = new Date().getTime();
         switch (action.action) {
@@ -92,7 +92,7 @@ router.post("/", async (req, res) => {
             });
         }
 
-        await page.unroute(/google-analytics\/g/, handler);
+        await page.unroute(/google-analytics.com\/g/, handler);
       }
 
       await page.waitForTimeout(5000);
@@ -138,7 +138,8 @@ router.post("/", async (req, res) => {
       await context.close();
       await browser.close();
       console.log("pepp");
-      res.send({ logger });
+      console.log({ logger });
+      res.send(logger);
     })();
   } catch (error) {
     console.log(error);
