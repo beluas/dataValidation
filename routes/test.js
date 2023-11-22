@@ -24,12 +24,15 @@ router.post("/", async (req, res) => {
       const postData = await req.body;
 
       const browser = await chromium.launch({ headless: true }); // Launch the browser
-      const context = await browser.newContext(); // Create a new browser context
+      const context = await browser.newContext({
+        userAgent:
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+      }); // Create a new browser context
       const page = await context.newPage(); // Open a new page
 
       const handler = createHandler();
 
-      await page.route(/google-analytics/, handler);
+      await page.route(/google-analytics\/g/, handler);
 
       await page.goto(website); // Navigate to your website
 
@@ -66,14 +69,14 @@ router.post("/", async (req, res) => {
       }
       await page.waitForTimeout(20000);
 
-      await page.unroute(/google-analytics/, handler);
+      await page.unroute(/google-analytics\/g/, handler);
 
       for (const action of postData.actions) {
         action["newPage"] = actualURL !== page.url();
         actualURL = page.url();
         const handler = await createHandler(action);
 
-        await page.route(/google-analytics/, handler);
+        await page.route(/google-analytics\/g/, handler);
 
         const timestamp = new Date().getTime();
         switch (action.action) {
@@ -92,7 +95,7 @@ router.post("/", async (req, res) => {
             });
         }
 
-        await page.unroute(/google-analytics/, handler);
+        await page.unroute(/google-analytics\/g/, handler);
       }
 
       await page.waitForTimeout(5000);
@@ -142,6 +145,8 @@ router.post("/", async (req, res) => {
     })();
   } catch (error) {
     console.log(error);
+    await context.close();
+    await browser.close();
     res.send({ error });
   }
 });
