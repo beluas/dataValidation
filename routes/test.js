@@ -108,7 +108,7 @@ router.post("/", async (req, res) => {
             // console.log({ request });
             // console.log("postData params", params);
             let debatchedRequests;
-            if (request.postData.length > 1) {
+            if (request.postData.length > 0) {
               debatchedRequests = debatchRequests(request.postData, params);
               const resultDebatchedRequests = assertRequests(
                 debatchedRequests,
