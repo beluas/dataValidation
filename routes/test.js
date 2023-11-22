@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 
       const handler = createHandler();
 
-      await page.route(/region/, handler);
+      await page.route(/google-analytics/, handler);
 
       await page.goto(website); // Navigate to your website
 
@@ -40,6 +40,7 @@ router.post("/", async (req, res) => {
       ) {
         return async (route, request) => {
           const requestURL = await request.url();
+          console.log(action.actionID, { requestURL });
           const bodyRequest = (await request.postData()) || null;
 
           let normalizedBody = normalizeBody(bodyRequest);
@@ -51,7 +52,7 @@ router.post("/", async (req, res) => {
               postRequests.push(entry);
             }
           }
-          console.log(requestURL);
+
           logger.requests.push({
             actionID: action.actionID,
             request_link: requestURL,
@@ -65,14 +66,14 @@ router.post("/", async (req, res) => {
       }
       await page.waitForTimeout(20000);
 
-      await page.unroute(/region/, handler);
+      await page.unroute(/google-analytics/, handler);
 
       for (const action of postData.actions) {
         action["newPage"] = actualURL !== page.url();
         actualURL = page.url();
         const handler = await createHandler(action);
 
-        await page.route(/region/, handler);
+        await page.route(/google-analytics/, handler);
 
         const timestamp = new Date().getTime();
         switch (action.action) {
@@ -91,7 +92,7 @@ router.post("/", async (req, res) => {
             });
         }
 
-        await page.unroute(/region/, handler);
+        await page.unroute(/google-analytics/, handler);
       }
 
       await page.waitForTimeout(5000);
