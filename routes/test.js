@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
               postRequests.push(entry);
             }
           }
-
+          console.log(requestURL);
           logger.requests.push({
             actionID: action.actionID,
             request_link: requestURL,
