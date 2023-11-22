@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
       let actualURL = req.url;
       const postData = await req.body;
 
-      const browser = await chromium.launch({ headless: false }); // Launch the browser
+      const browser = await chromium.launch({ headless: true }); // Launch the browser
       const context = await browser.newContext(); // Create a new browser context
       const page = await context.newPage(); // Open a new page
 
