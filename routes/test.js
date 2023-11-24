@@ -155,3 +155,5 @@ router.get("/", async (req, res) => {
   res.send({ title: "Pepp" });
 });
 module.exports = router;
+
+//"[data-amgdprcookie-js='accept']"
