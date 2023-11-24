@@ -28,10 +28,12 @@ router.post("/", async (req, res) => {
       const page = await context.newPage(); // Open a new page
 
       const handler = createHandler();
+      await page.route(/analytics/, (route, request) => {
+        console.log(request.url());
+      });
+      await page.route(/g\/collect?/, handler);
 
-      await page.route(/google-analytics.com\/g/, handler);
-
-      await page.goto(website); // Navigate to your website
+      await page.goto(website, { waitUntil: "domcontentloaded" }); // Navigate to your website
 
       await page.waitForTimeout(20000);
 
@@ -66,14 +68,14 @@ router.post("/", async (req, res) => {
       }
       await page.waitForTimeout(20000);
 
-      await page.unroute(/google-analytics.com\/g/, handler);
+      await page.unroute(/g\/collect?/, handler);
 
       for (const action of postData.actions) {
         action["newPage"] = actualURL !== page.url();
         actualURL = page.url();
         const handler = await createHandler(action);
 
-        await page.route(/google-analytics.com\/g/, handler);
+        await page.route(/g\/collect?/, handler);
 
         const timestamp = new Date().getTime();
         switch (action.action) {
@@ -92,7 +94,7 @@ router.post("/", async (req, res) => {
             });
         }
 
-        await page.unroute(/google-analytics.com\/g/, handler);
+        await page.unroute(/g\/collect?/, handler);
       }
 
       await page.waitForTimeout(5000);
